@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/33691065/README.md)
 <div align="center">
 
 <img src="docs/icon.png" width="128" alt="Pavilion Master icon" />
