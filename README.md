@@ -21,17 +21,9 @@
 
 <div align="center">
 
-<img src="docs/screenshots/dashboard-acid-green.png" width="780" alt="Pavilion Master dashboard" />
+<img src="docs/screenshots/INAPPSCREENSHOT.png" width="780" alt="Pavilion Master dashboard" />
 
 <br/><br/>
-
-| Ghost White | Ultra Violet |
-|:---:|:---:|
-| <img src="docs/screenshots/dashboard-ghost-white.png" width="380" alt="Ghost White theme" /> | <img src="docs/screenshots/dashboard-ultra-violet.png" width="380" alt="Ultra Violet theme" /> |
-
-| Pick your laptop colour (first launch) | Turbo fan on | Unsupported PC (safe mode) |
-|:---:|:---:|:---:|
-| <img src="docs/screenshots/accent-picker.png" width="250" alt="Colour variant picker" /> | <img src="docs/screenshots/turbo-on.png" width="250" alt="Turbo fan mode" /> | <img src="docs/screenshots/unsupported.png" width="250" alt="Unsupported processor screen" /> |
 
 </div>
 
