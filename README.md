@@ -102,7 +102,7 @@ Use **Settings → Apps → Pavilion Master → Uninstall**, or run `Uninstall.b
 > **Administrator rights are required.** Loading the driver and changing power limits needs an elevated process, so the app is set to always run as administrator and Windows will ask for confirmation each time.
 
 > [!NOTE]
-> **Unofficial project.** Pavilion Master is an independent fan-made tool. It is **not affiliated with, endorsed by or supported by HP, AMD, NVIDIA or Apple**. Support requests should not be sent to them.
+> **Unofficial project.** Pavilion Master is an independent fan-made tool. It is **not affiliated with, endorsed by or supported by HP, AMD or NVIDIA**. Support requests should not be sent to them.
 
 **Also good to know**
 
@@ -170,17 +170,17 @@ Pavilion Master stands on the work of others. Huge thanks to everyone below.
 
 | Font | Credit | Used for |
 |---|---|---|
-| **SF Pro Display** | © 2015-2020 **Apple Inc.** | General interface text. |
 | **AKONY** | © 2023 **grinfleim**, designed by **Vladimir Klenov** | "TURBO ON" / "AUTO" and the large power numbers. |
 | **Angled** | **Artyway** — designed by **Yehor Lisnyi** ([Creative Market](https://creativemarket.com/artyway)) | CPU / GPU temperature and "TOTAL" labels. |
 
-Fonts remain the property of their respective owners and are used under their own license terms; they are **not** covered by this project's MIT license and may not be extracted or reused from this application without the owners' permission.
+> [!WARNING]
+> **Fonts: credit only — no license.** The fonts above belong to their creators and are **not licensed to this project**. They are credited here out of respect for their authors; a credit is **not** a license or permission to use them. They are **not** covered by this project's MIT license, and nothing in this repository or release grants you any right to use, copy, extract or redistribute them. If you are a rights holder and would like a font removed or replaced, please open an issue and it will be taken down in the next release.
 
 ### Trademarks
-HP and Pavilion are trademarks of HP Inc. AMD and Ryzen are trademarks of Advanced Micro Devices, Inc. NVIDIA, GeForce and NVML are trademarks and/or registered trademarks of NVIDIA Corporation. Apple and SF Pro are trademarks of Apple Inc. Windows is a trademark of Microsoft Corporation. All other trademarks belong to their respective owners. They are used here only to describe compatibility.
+HP and Pavilion are trademarks of HP Inc. AMD and Ryzen are trademarks of Advanced Micro Devices, Inc. NVIDIA, GeForce and NVML are trademarks and/or registered trademarks of NVIDIA Corporation. Windows is a trademark of Microsoft Corporation. All other trademarks belong to their respective owners. They are used here only to describe compatibility.
 
 ### Pavilion Master license
-The original source code of Pavilion Master is released under the **[MIT License](LICENSE)** © 2026 MIDO5659. Third-party components keep their own licenses as listed above.
+The original source code of Pavilion Master is released under the **[MIT License](LICENSE)** © 2026 MIDO5659. This covers **only** the author's own code. Third-party components keep their own licenses as listed above, and the **fonts are not licensed to this project** and are excluded from the MIT license entirely (see [Fonts](#fonts)).
 
 ---
 
