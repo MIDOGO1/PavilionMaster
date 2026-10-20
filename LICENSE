@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 MIDO
+Copyright (c) 2026 MIDO5659
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+NOTE: This license covers only the original source code of Pavilion Master.
+Bundled third-party components (Qt, RyzenADJ, WinRing0, NVML, artwork) remain
+under their own licenses - see "Credits & licenses" in README.md.
+
+FONTS: Any fonts included in or displayed by the application (including AKONY
+and Angled) are the property of their respective owners, are
+NOT licensed to this project, and are NOT covered by the license above. They are
+credited in README.md for attribution only; a credit is not a license. No
+right to use, copy, extract or redistribute them is granted.
