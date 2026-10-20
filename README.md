@@ -4,7 +4,7 @@
 
 # Pavilion Master
 
-**A sleek control center for the HP Pavilion 15 Gaming — live temperatures, power draw, CPU power profiles and fan control in one window.**
+**A sleek control center for the HP Pavilion 15 Gaming | live temperatures, power draw, CPU power profiles and fan control in one window.**
 
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%2F%2011%20(x64)-2b2b2b?style=for-the-badge&logo=windows&logoColor=white)
 ![Built with](https://img.shields.io/badge/built%20with-Qt%206%20%2F%20QML-41cd52?style=for-the-badge&logo=qt&logoColor=white)
