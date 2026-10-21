@@ -145,7 +145,7 @@ No NVIDIA GPU was found or the NVIDIA driver isn't installed. Update or reinstal
 
 ## 🧰 Building from source
 
-The source code will be published here after launch. It is a Qt 6 (Qt Quick / QML) + C++17 project built with CMake.
+The source code will be published on a later date. It is a Qt 6 (Qt Quick / QML) + C++17 project built with CMake.
 
 ---
 
