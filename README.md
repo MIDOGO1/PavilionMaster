@@ -168,19 +168,20 @@ Pavilion Master stands on the work of others. Huge thanks to everyone below.
 
 ### Fonts
 
-| Font | Credit | Used for |
-|---|---|---|
-| **AKONY** | © 2023 **grinfleim**, designed by **Vladimir Klenov** | "TURBO ON" / "AUTO" and the large power numbers. |
-| **Angled** | **Artyway** — designed by **Yehor Lisnyi** ([Creative Market](https://creativemarket.com/artyway)) | CPU / GPU temperature and "TOTAL" labels. |
+Both fonts are open-source and licensed under the **[SIL Open Font License 1.1](https://openfontlicense.org)**. They were modified for this project and renamed, as the license requires.
 
-> [!WARNING]
-> **Fonts: credit only — no license.** The fonts above belong to their creators and are **not licensed to this project**. They are credited here out of respect for their authors; a credit is **not** a license or permission to use them. They are **not** covered by this project's MIT license, and nothing in this repository or release grants you any right to use, copy, extract or redistribute them. If you are a rights holder and would like a font removed or replaced, please open an issue and it will be taken down in the next release.
+| Font in the app | Based on | Credit | Used for |
+|---|---|---|---|
+| **Pavilion Ultra** | **[Outfit](https://github.com/Outfitio/Outfit-Fonts) Bold** | © 2021 The Outfit Project Authors · designed by **Rodrigo Fuenzalida** ([fragTYPE](https://www.fragtypefoundry.xyz)) | "TURBO ON" / "AUTO" and the large power numbers. *Modified: glyphs widened and horizontal strokes thickened.* |
+| **Pavilion Technoid** | **[Tektur](https://github.com/hyvyys/Tektur) Medium** | © 2023 The Tektur Project Authors · designed by **Adam Jagosz** ([adamjagosz.com](https://www.adamjagosz.com)) | CPU / GPU temperature and "TOTAL" labels. *Modified: strokes emboldened.* |
+
+The full license texts are included in the `licenses` folder next to the app (and in `fonts/` in the source). The modified fonts are distributed under the same OFL 1.1 and are not sold on their own. The fonts are covered by the OFL, **not** by this project's MIT license.
 
 ### Trademarks
 HP and Pavilion are trademarks of HP Inc. AMD and Ryzen are trademarks of Advanced Micro Devices, Inc. NVIDIA, GeForce and NVML are trademarks and/or registered trademarks of NVIDIA Corporation. Windows is a trademark of Microsoft Corporation. All other trademarks belong to their respective owners. They are used here only to describe compatibility.
 
 ### Pavilion Master license
-The original source code of Pavilion Master is released under the **[MIT License](LICENSE)** © 2026 MIDO5659. This covers **only** the author's own code. Third-party components keep their own licenses as listed above, and the **fonts are not licensed to this project** and are excluded from the MIT license entirely (see [Fonts](#fonts)).
+The original source code of Pavilion Master is released under the **[MIT License](LICENSE)** © 2026 MIDO5659. This covers **only** the author's own code. Third-party components keep their own licenses as listed above, and the bundled **fonts remain under the SIL Open Font License 1.1** (see [Fonts](#fonts)).
 
 ---
 

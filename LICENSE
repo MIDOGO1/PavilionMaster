@@ -24,8 +24,16 @@ NOTE: This license covers only the original source code of Pavilion Master.
 Bundled third-party components (Qt, RyzenADJ, WinRing0, NVML, artwork) remain
 under their own licenses - see "Credits & licenses" in README.md.
 
-FONTS: Any fonts included in or displayed by the application (including AKONY
-and Angled) are the property of their respective owners, are
-NOT licensed to this project, and are NOT covered by the license above. They are
-credited in README.md for attribution only; a credit is not a license. No
-right to use, copy, extract or redistribute them is granted.
+FONTS: The fonts bundled with the application are NOT covered by the license
+above. They are licensed under the SIL Open Font License, Version 1.1:
+
+  Pavilion Ultra     - modified version of Outfit Bold
+                       Copyright 2021 The Outfit Project Authors
+                       (https://github.com/Outfitio/Outfit-Fonts)
+  Pavilion Technoid  - modified version of Tektur Medium
+                       Copyright 2023 The Tektur Project Authors
+                       (https://www.github.com/hyvyys/Tektur)
+
+The modified fonts are distributed under the same SIL OFL 1.1. The full license
+texts are in OFL-Outfit.txt and OFL-Tektur.txt (the "licenses" folder of the
+installed app, and "fonts" in the source).
