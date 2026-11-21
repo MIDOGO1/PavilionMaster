@@ -33,15 +33,15 @@
 
 | | |
 |---|---|
-| 🌡️ **Live CPU monitoring** | Die temperature and package power, refreshed every second. |
+| 🌡️ **Live CPU monitoring** | Die temperature and package power, refreshed every second. Needs a supported CPU (it is read through the WinRing0 driver). The iGPU reading mirrors the CPU die, since they share one chip. |
 | 🎮 **NVIDIA GPU monitoring** | Temperature and power draw through NVML. Shows `N/A` when there is no NVIDIA GPU. |
 | ⚡ **Total power** | CPU + GPU draw combined in one big number. |
-| 🚀 **Three power profiles** | **Performance**, **Balanced** and **Quiet**, applied through RyzenADJ with limits tuned per CPU. |
+| 🚀 **Three power profiles** | **Performance**, **Balanced** and **Quiet**, applied through RyzenADJ with limits tuned per CPU. Each profile also switches the Windows power plan: Performance uses a *Pavilion Master Ultimate Performance* plan, Balanced uses Balanced, Quiet uses Power saver. |
 | 🌀 **Turbo fan** | One click to push the fan to 100 %, one click back to automatic. |
 | 🔋 **Battery stats** | Charge level, charging state and an *estimated* battery health. |
 | 🖥️ **System information** | CPU, GPU, RAM and motherboard at a glance. |
-| 🎨 **Colour variants** | Match the app to your laptop: Acid Green, Ghost White or Ultra Violet. |
-| 🛡️ **Safe on any PC** | On unsupported hardware the app opens in a monitoring-only mode and **never touches low-level hardware**. |
+| 🎨 **Colour variants** | Match the app to your laptop: Acid Green, Ghost White or Ultra Violet. You pick one on first launch and it is remembered. |
+| 🛡️ **Limited mode on other CPUs** | On an unsupported CPU the app still opens, but the controls are disabled and it **never loads the driver or writes to hardware**. D-GPU, battery and system information still work. |
 
 ---
 
@@ -60,7 +60,10 @@ Pavilion Master is built for the **HP Pavilion 15 Gaming** with one of these AMD
 <sub>Values are sustained (STAPM) / fast / slow power limits and the Tctl temperature limit. They are sensible starting points based on AMD's published ranges, **not** values measured on every laptop.</sub>
 
 > [!NOTE]
-> **Any other PC** — different CPU, different laptop, Intel, desktop — is treated as *unsupported*. The app still installs and opens, shows an "Unsupported Processor" screen, and the profile and fan controls are disabled. No WinRing0 driver is loaded and no hardware is written to.
+> **Any other CPU** — a different AMD model, or Intel — is treated as *unsupported*. The app still installs and opens, shows an "Unsupported Processor" screen, and the profile and fan controls are disabled. No WinRing0 driver is loaded and no hardware is written to. CPU temperature and power show `--` (they are read through that driver); D-GPU, battery and system information still work.
+
+> [!WARNING]
+> **Support is decided by the CPU model only — the app does not check the laptop model.** A different laptop or desktop that happens to have one of the five CPUs above is treated as supported, and the fan control then sends commands written for the HP Pavilion 15 Gaming's embedded controller. Don't use Pavilion Master on any other machine.
 
 **Requirements:** Windows 10 (1809) or Windows 11, 64-bit. Nothing else needs to be installed — the Qt runtime is bundled.
 
@@ -82,7 +85,7 @@ The files are not code-signed, so Windows shows an "Unknown publisher" warning. 
 
 ### Uninstall
 
-Use **Settings → Apps → Pavilion Master → Uninstall**, or run `Uninstall.bat` from the install folder. This removes the app, shortcuts, saved settings and the WinRing0 driver service.
+Use **Settings → Apps → Pavilion Master → Uninstall**, or run `Uninstall.bat` from the install folder. This removes the app, shortcuts, saved settings, the *Pavilion Master Ultimate Performance* power plan and the WinRing0 driver service.
 
 ---
 
@@ -107,24 +110,25 @@ Use **Settings → Apps → Pavilion Master → Uninstall**, or run `Uninstall.b
 **Also good to know**
 
 - Fan control writes to the laptop's embedded controller and is designed for the HP Pavilion 15 Gaming only. The fan never goes below 38 %, and **Turbo** sets it to 100 %.
-- Battery health is an **estimate**, calculated against a fixed design capacity.
-- Power profiles reset when the PC restarts or sleeps; re-apply them after boot.
+- Battery health is an **estimate**: the battery's reported full-charge capacity divided by a fixed design capacity of 52,553 mWh.
+- The CPU power limits reset when the PC restarts or sleeps; re-apply a profile afterwards. The Windows power plan stays on whatever the last profile switched it to.
 - Closing the app does not revert the profile that is currently applied. Pick **Balanced** before you quit if unsure.
+- The first time you open the app on a supported laptop it asks you to choose a colour variant.
 
 ---
 
 ## 🛠️ Troubleshooting
 
 <details>
-<summary><b>The controls are greyed out / "Unsupported Processor" appears</b></summary>
+<summary><b>"Unsupported Processor" appears and the controls are greyed out</b></summary>
 
-Your CPU isn't one of the five supported models, or the driver couldn't load. Check `control_center.log` in the install folder — it says either `Unsupported CPU` or `FanControl initialization failed`.
+Your CPU isn't one of the five supported models. Check `control_center.log` in the install folder — it says `Unsupported CPU` followed by the name Windows reports for your processor.
 </details>
 
 <details>
 <summary><b>The CPU shows "--" and the fan button does nothing on a supported laptop</b></summary>
 
-The WinRing0 driver was probably blocked or deleted by Windows Security. Open **Windows Security → Virus & threat protection → Protection history**, review the entry for `WinRing0x64.sys`, and restore it only if you accept the risks described above. Then restart the app.
+`control_center.log` will say `FanControl initialization failed`. The WinRing0 driver was probably blocked or deleted by Windows Security. Open **Windows Security → Virus & threat protection → Protection history**, review the entry for `WinRing0x64.sys`, and restore it only if you accept the risks described above. Then restart the app.
 
 To check the driver service in a terminal: `sc query WinRing0_1_2_0`
 </details>
@@ -147,13 +151,17 @@ No NVIDIA GPU was found or the NVIDIA driver isn't installed. Update or reinstal
  
 ### Option A: GitHub Actions (no local tools)
  
-Push the repository. The workflow in `.github/workflows/build.yml` builds the app on a Windows runner. Download the `PavilionMaster-exe` artifact from the run's page under the **Actions** tab.
+Push the repository. The workflow in `.github/workflows/build.yml` builds the app on a Windows runner and packs everything into `PavilionMaster-Bundle.zip` (the app, `Install.bat`, `Uninstall.bat` and the runtime files). Download the `PavilionMaster-Bundle` artifact from the run's page under the **Actions** tab.
+
+The bundle also needs four third-party files that are not built from this repo — `ryzenadj-real.exe`, `libryzenadj.dll`, `WinRing0x64.dll` and `WinRing0x64.sys`. Put them in the `redist/` folder (see `redist/README.txt`) or the build stops with an error.
+
+**Publishing a release:** push a version tag, for example `git tag v0.9.9` then `git push origin v0.9.9`. The workflow builds the bundle and attaches `PavilionMaster-Bundle.zip` to a GitHub Release for that tag.
  
 ### Option B: Qt Creator (Windows)
  
 1. Install Qt 6.5 or newer with the **Qt Quick** and **Qt Shader Tools** modules, using the MSVC 64-bit kit.
 2. Open `CMakeLists.txt` in Qt Creator and configure the project with the MSVC kit.
-3. Build in Release mode.
+3. Build in Release mode. This gives you the main executable only; the launcher, RyzenAdj shim, installer and `PavilionMaster-Bundle.zip` come from the GitHub Actions workflow.
 Every `.ttf` / `.otf` file in `fonts/` is embedded into the executable at build time. Qt's `QFontDatabase` registers them at startup, so the app looks the same on PCs without those fonts installed. After changing the fonts folder, run **Build > Run CMake** before rebuilding.
 
 ---
@@ -173,23 +181,24 @@ Pavilion Master stands on the work of others. Huge thanks to everyone below.
 | **NVML** (NVIDIA Management Library) | © **NVIDIA Corporation** | NVIDIA's own license (ships with the NVIDIA driver / CUDA Toolkit) | Reading NVIDIA GPU temperature and power (`nvml.dll`, `nvml.h`). |
 | **[WinRing0](https://openlibsys.org/)** | **OpenLibSys.org** | BSD-style | Low-level access to CPU registers and the fan controller. |
 | **[Qt 6](https://www.qt.io/)** | © The Qt Company Ltd. and contributors | LGPL-3.0 (dynamically linked) | The UI framework. Qt's source code is available from [qt.io](https://www.qt.io/download-open-source). |
-| **MinGW-w64 runtime** (`libgcc`, `libstdc++`, `winpthreads`) | GNU Project and MinGW-w64 contributors | GPL-3.0 with the GCC Runtime Library Exception | C++ runtime for the compiled app. |
+| **Microsoft Visual C++ runtime** (`vcruntime140.dll`, `msvcp140.dll`) | © Microsoft Corporation | Microsoft's redistributable terms | C++ runtime for the compiled app. |
 
 ### Fonts
 
 | Font | Credit | Used for |
 |---|---|---|
+| **Inter** | © 2020 **The Inter Project Authors** ([rsms/inter](https://github.com/rsms/inter)), licensed under the SIL Open Font License 1.1 (`fonts/Inter-OFL.txt`) | Main interface text. |
 | **AKONY** | © 2023 **grinfleim**, designed by **Vladimir Klenov** | "TURBO ON" / "AUTO" and the large power numbers. |
 | **Angled** | **Artyway** — designed by **Yehor Lisnyi** ([Creative Market](https://creativemarket.com/artyway)) | CPU / GPU temperature and "TOTAL" labels. |
 
 > [!WARNING]
-> **Fonts: credit only — no license.** The fonts above belong to their creators and are **not licensed to this project**. They are credited here out of respect for their authors; a credit is **not** a license or permission to use them. They are **not** covered by this project's MIT license, and nothing in this repository or release grants you any right to use, copy, extract or redistribute them. If you are a rights holder and would like a font removed or replaced, please open an issue and it will be taken down in the next release.
+> **AKONY and Angled: credit only — no license.** These two fonts belong to their creators and are **not licensed to this project**. They are credited here out of respect for their authors; a credit is **not** a license or permission to use them. They are **not** covered by this project's MIT license, and nothing in this repository or release grants you any right to use, copy, extract or redistribute them. If you are a rights holder and would like a font removed or replaced, please open an issue and it will be taken down in the next release.
 
 ### Trademarks
 HP and Pavilion are trademarks of HP Inc. AMD and Ryzen are trademarks of Advanced Micro Devices, Inc. NVIDIA, GeForce and NVML are trademarks and/or registered trademarks of NVIDIA Corporation. Windows is a trademark of Microsoft Corporation. All other trademarks belong to their respective owners. They are used here only to describe compatibility.
 
 ### Pavilion Master license
-The original source code of Pavilion Master is released under the **[MIT License](LICENSE)** © 2026 MIDO5659. This covers **only** the author's own code. Third-party components keep their own licenses as listed above, and the **fonts are not licensed to this project** and are excluded from the MIT license entirely (see [Fonts](#fonts)).
+The original source code of Pavilion Master is released under the **[MIT License](LICENSE)** © 2026 MIDO5659. This covers **only** the author's own code. Third-party components keep their own licenses as listed above, and the **AKONY and Angled fonts are not licensed to this project** and are excluded from the MIT license entirely (see [Fonts](#fonts)). Inter is licensed separately under the SIL Open Font License.
 
 ---
 
