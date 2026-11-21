@@ -8,7 +8,7 @@
 
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%2F%2011%20(x64)-2b2b2b?style=for-the-badge&logo=windows&logoColor=white)
 ![Built with](https://img.shields.io/badge/built%20with-Qt%206%20%2F%20QML-41cd52?style=for-the-badge&logo=qt&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.0-8a5cf6?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.9.9-8a5cf6?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-b6f23c?style=for-the-badge)
 
 [**⬇ Download**](../../releases/latest) · [Features](#-features) · [Install](#-installation) · [⚠ Warnings](#-important-warnings) · [Credits](#-credits--licenses)
