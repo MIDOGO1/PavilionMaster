@@ -20,7 +20,7 @@ jobs:
         shell: pwsh
         run: |
           python -m pip install --upgrade aqtinstall
-          python -m aqt install-qt windows desktop 6.7.3 win64_msvc2019_64 --outputdir C:\Qt --modules qtdeclarative qtshadertools
+          python -m aqt install-qt windows desktop 6.7.3 win64_msvc2019_64 --outputdir C:\Qt
 
       - name: Configure
         shell: pwsh
