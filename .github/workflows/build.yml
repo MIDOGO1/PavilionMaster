@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
 
@@ -15,26 +15,26 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.7.3'
-          arch: win64_msvc2019_64
-          modules: 'qtquick qtshadertools qtdeclarative'
+          arch: 'win64_msvc2019_64'
+          modules: 'qtdeclarative qtshadertools'
           cache: true
 
       - name: Configure
         shell: pwsh
-        run: cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$env:Qt6_DIR"
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="$env:Qt6_DIR"
 
       - name: Build
         shell: pwsh
         run: cmake --build build --config Release
 
-      - name: Collect artifact
+      - name: Collect app and Qt runtime
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
-          Copy-Item build\app15GControlCetner.exe dist\
-          Get-ChildItem -Path $env:Qt6_DIR\..\..\..\bin -Filter *.dll -ErrorAction SilentlyContinue | Out-Null
-          Copy-Item installer.bat dist\ -ErrorAction SilentlyContinue
-          Copy-Item -Recurse -ErrorAction SilentlyContinue licenses dist\licenses
+          Copy-Item build\Release\app15GControlCetner.exe dist\
+          & "$env:Qt6_DIR\..\..\..\bin\windeployqt.exe" --release --qmldir . dist\app15GControlCetner.exe
+          Copy-Item installer.bat dist\
+          if (Test-Path licenses) { Copy-Item -Recurse licenses dist\licenses }
 
       - uses: actions/upload-artifact@v4
         with:
