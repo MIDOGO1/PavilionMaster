@@ -1,0 +1,40 @@
+MIT License
+
+Copyright (c) 2026 MIDO5659
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+SCOPE OF THIS LICENSE
+
+This license covers ONLY the original source code and documentation written by
+MIDO5659 for Pavilion Master. It does NOT cover, and grants no rights to:
+
+  * Third-party components, which keep their own licenses: RyzenAdj (LGPL-3.0),
+    WinRing0 (OpenLibSys.org), NVIDIA NVML (NVIDIA's license), Qt 6 (LGPL-3.0)
+    and the MinGW-w64 / Microsoft Visual C++ runtimes.
+  * Fonts (e.g. AKONY, Angled). They belong to their creators, are credited
+    only, and are NOT licensed to this project. The Inter fonts are licensed
+    separately under the SIL Open Font License (see fonts/Inter-OFL.txt).
+  * Trademarks. HP, Pavilion, AMD, Ryzen, NVIDIA, GeForce and Windows belong
+    to their respective owners. Pavilion Master is an unofficial, independent
+    project and is not affiliated with or endorsed by any of them.
+
+WARNING: Pavilion Master changes CPU power limits, temperature limits and fan
+behaviour, and loads a third-party kernel driver. Use it at your own risk.

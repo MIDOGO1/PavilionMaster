@@ -2,8 +2,13 @@ name: Build Pavilion Master (Windows)
 
 on:
   push:
+    branches: ['**']
+    tags: ['v*']          # pushing a tag like v0.9.9 also publishes a GitHub Release
   pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: write         # needed to create/upload a Release
 
 jobs:
   build:
@@ -16,6 +21,7 @@ jobs:
         with:
           python-version: '3.12'
 
+      # Qt 6 ships QML / ShaderTools in the base package, so no --modules are needed.
       - name: Install Qt 6.7.3
         shell: pwsh
         run: |
@@ -26,20 +32,77 @@ jobs:
         shell: pwsh
         run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="C:\Qt\6.7.3\msvc2019_64"
 
-      - name: Build
+      - name: Build app
         shell: pwsh
         run: cmake --build build --config Release
 
-      - name: Collect app and Qt runtime
+      # PavilionMaster.exe  = launcher (single instance, asks for admin, starts the app)
+      # ryzenadj.exe        = shim that calls ryzenadj-real.exe and switches the power plan
+      - name: Build launcher and RyzenAdj shim
+        shell: cmd
+        run: |
+          for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VS=%%i"
+          call "%VS%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          cd extras-launcher-shim
+          rc /nologo launcher.rc || exit /b 1
+          cl /nologo /O2 /EHsc /std:c++17 /DUNICODE /D_UNICODE launcher.cpp launcher.res /Fe:PavilionMaster.exe /link /SUBSYSTEM:WINDOWS /MANIFEST:NO user32.lib || exit /b 1
+          cl /nologo /O2 /EHsc /std:c++17 /DUNICODE /D_UNICODE ryzenadj_shim.cpp /Fe:ryzenadj.exe /link /SUBSYSTEM:WINDOWS user32.lib || exit /b 1
+
+      - name: Check third-party runtime files
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force dist | Out-Null
-          Copy-Item build\Release\app15GControlCetner.exe dist\
-          & "C:\Qt\6.7.3\msvc2019_64\bin\windeployqt.exe" --release --qmldir . dist\app15GControlCetner.exe
-          Copy-Item installer.bat dist\
-          if (Test-Path licenses) { Copy-Item -Recurse licenses dist\licenses }
+          $need = 'ryzenadj-real.exe','libryzenadj.dll','WinRing0x64.dll','WinRing0x64.sys'
+          $missing = $need | Where-Object { -not (Test-Path "redist\$_") }
+          if ($missing) {
+            Write-Error "Missing in the repo's redist folder: $($missing -join ', '). See redist/README.txt."
+            exit 1
+          }
+
+      - name: Assemble bundle
+        shell: pwsh
+        run: |
+          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME } else { 'dev-' + $env:GITHUB_SHA.Substring(0,7) }
+          $app = 'bundle\app'
+          New-Item -ItemType Directory -Force $app | Out-Null
+
+          Copy-Item build\Release\app15GControlCetner.exe "$app\PavilionMasterCore.exe"
+          Copy-Item extras-launcher-shim\PavilionMaster.exe $app\
+          Copy-Item extras-launcher-shim\ryzenadj.exe $app\
+          foreach ($f in 'ryzenadj-real.exe','libryzenadj.dll','WinRing0x64.dll','WinRing0x64.sys') { Copy-Item "redist\$f" $app\ }
+
+          # Qt runtime (+ Visual C++ runtime when windeployqt can find Visual Studio)
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath
+          $env:VCINSTALLDIR = "$vs\VC\"
+          & "C:\Qt\6.7.3\msvc2019_64\bin\windeployqt.exe" --release --qmldir . "$app\PavilionMasterCore.exe"
+          if (-not (Test-Path "$app\vcruntime140.dll")) {
+            $crt = Get-ChildItem "$vs\VC\Redist\MSVC\*\x64\Microsoft.VC*.CRT" -Directory -ErrorAction SilentlyContinue | Sort-Object FullName | Select-Object -Last 1
+            if ($crt) { Copy-Item "$($crt.FullName)\*.dll" $app\ } else { Write-Warning 'Visual C++ runtime DLLs not bundled' }
+          }
+
+          Copy-Item installer\Install.bat bundle\
+          Copy-Item installer\Uninstall.bat bundle\
+          Set-Content -Path bundle\version.txt -Value $version -NoNewline
+          if (Test-Path LICENSE)  { Copy-Item LICENSE bundle\ }
+          if (Test-Path licenses) { Copy-Item -Recurse licenses bundle\licenses }
+
+          Compress-Archive -Path bundle\* -DestinationPath PavilionMaster-Bundle.zip -Force
+          Get-ChildItem PavilionMaster-Bundle.zip | Format-List Name, Length
 
       - uses: actions/upload-artifact@v4
         with:
-          name: PavilionMaster-exe
-          path: dist/
+          name: PavilionMaster-Bundle
+          path: PavilionMaster-Bundle.zip
+
+      # Only runs when a tag like v0.9.9 is pushed (or a release is created in the GitHub UI).
+      - name: Attach zip to the GitHub Release
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view $env:GITHUB_REF_NAME 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $env:GITHUB_REF_NAME PavilionMaster-Bundle.zip --clobber
+          } else {
+            gh release create $env:GITHUB_REF_NAME PavilionMaster-Bundle.zip --title "Pavilion Master $env:GITHUB_REF_NAME" --generate-notes
+          }

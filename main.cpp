@@ -14,19 +14,16 @@
 #include <QFontDatabase>
 #include <windows.h>
 
-// DWM rounded corners support (missing from older MinGW headers)
-#ifndef DWMWA_WINDOW_CORNER_PREFERENCE
-#define DWMWA_WINDOW_CORNER_PREFERENCE 33
-#endif
-typedef enum {
-    DWMWCP_DEFAULT    = 0,
-    DWMWCP_DONOTROUND = 1,
-    DWMWCP_ROUND      = 2,
-    DWMWCP_ROUNDSMALL = 3
-} DWM_WINDOW_CORNER_PREFERENCE;
-
 #include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
+
+// DWM rounded-corner constants. Defined under local names because newer Windows
+// SDKs (10.0.22000+) already declare DWMWA_WINDOW_CORNER_PREFERENCE and
+// DWM_WINDOW_CORNER_PREFERENCE, which older MinGW/SDK headers lack.
+namespace {
+constexpr DWORD kDwmaWindowCornerPreference = 33;  // DWMWA_WINDOW_CORNER_PREFERENCE
+constexpr int   kDwmcpDoNotRound            = 1;   // DWMWCP_DONOTROUND
+}
 
 #include "SystemBackend.h"
 #include "SingleInstance.h"
@@ -132,8 +129,8 @@ int main(int argc, char *argv[]) {
         QWindow* win = qobject_cast<QWindow*>(roots.first());
         if (win) {
             HWND hwnd = (HWND)win->winId();
-            DWM_WINDOW_CORNER_PREFERENCE pref = DWMWCP_DONOTROUND;
-            DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE,
+            int pref = kDwmcpDoNotRound;
+            DwmSetWindowAttribute(hwnd, kDwmaWindowCornerPreference,
                                   &pref, sizeof(pref));
         }
     }
